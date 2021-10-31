@@ -1,14 +1,15 @@
-//Referencias en el HTML
-
 import { todoList } from ".."
 import { Todo } from "../classes"
 
+
+//Referencias en el HTML
 const divTodoList = document.querySelector('.todo-list')
-const txtInput = document.querySelector('.new-todo')
-const btnBorrar = document.querySelector('.clear-completed')
+const txtInput    = document.querySelector('.new-todo')
+const btnBorrar   = document.querySelector('.clear-completed')
 
 export const crearTodoHtml = (todo) => {
-    const htmlTodo =  `
+
+    const htmlTodo = `
         <li class="${todo.completado === true ? 'completed' : ''}" data-id="${todo.id}">
             <div class="view">
                 <input class="toggle" type="checkbox" ${todo.completado === true ? 'checked' : ''}>
@@ -18,8 +19,9 @@ export const crearTodoHtml = (todo) => {
             <input class="edit" value="Create a TodoMVC template">
         </li>`
 
-    const div = document.createElement('div')
+    const div     = document.createElement('div')
     div.innerHTML = htmlTodo
+
     divTodoList.append(div.firstElementChild)
 
 }
@@ -27,33 +29,53 @@ export const crearTodoHtml = (todo) => {
 //Eventos
 
 txtInput.addEventListener('keyup', (e) => {
-    if(e.keyCode === 13 && txtInput.value.length > 0) {
+
+    if (e.keyCode === 13 && txtInput.value.length > 0) {
+
         const nuevoTodo = new Todo(txtInput.value)
+
         todoList.nuevoTodo(nuevoTodo)
+
         crearTodoHtml(nuevoTodo)
+
         txtInput.value = ''
     }
+
 })
 
 divTodoList.addEventListener('click', (e) => {
-   const nombreElemento =  e.target.localName
-   const todoElemento = e.target.parentElement.parentElement
-   const todoId = todoElemento.getAttribute('data-id')
-   if(nombreElemento.includes('input')) {
-       todoList.toggleTodo(+todoId)
-       todoElemento.classList.toggle('completed')
-   } else if(nombreElemento.includes('button')) {
-       todoList.eliminarTodo(+todoId)
-       divTodoList.removeChild(todoElemento)
-   }
+
+    const nombreElemento = e.target.localName
+    const todoElemento   = e.target.parentElement.parentElement
+    const todoId         = todoElemento.getAttribute('data-id')
+
+    if (nombreElemento.includes('input')) {
+
+        todoList.toggleTodo(+todoId)
+        todoElemento.classList.toggle('completed')
+
+    } else if (nombreElemento.includes('button')) {
+
+        todoList.eliminarTodo(+todoId)
+        divTodoList.removeChild(todoElemento)
+
+    }
+
 })
 
 btnBorrar.addEventListener('click', () => {
-    for(let i = divTodoList.children.length - 1; i >= 0; i--) {
+
+    for (let i = divTodoList.children.length - 1; i >= 0; i--) {
+
         const elemento = divTodoList.children[i]
-        if(elemento.classList.contains('completed')) {
+
+        if (elemento.classList.contains('completed')) {
+
             divTodoList.removeChild(elemento)
+
         }
     }
+
     todoList.eliminarCompletados()
+
 })
